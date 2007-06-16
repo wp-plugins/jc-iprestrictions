@@ -3,7 +3,7 @@
 Plugin Name: JC-IPRestrictions
 Plugin URI: http://www.joshcook.net/programming/wordpress/jc-iprestrictions/
 Description: Provides the ability to restrict access to your web site by IP address and/or IP network.
-Version: 1.0
+Version: 1.1
 Author: Joshua R. Cook
 Author URI: http://www.joshcook.net/
 */
@@ -204,11 +204,6 @@ function jc_ipr_f_RestrictProcess()
 	
 	$jc_ipr_v_RestrictedMessage	= get_option('jc_ipr_v_RestrictedMessage');
 	
-	if ($jc_ipr_v_RestrictedMessage == Null)
-	{
-	$jc_ipr_v_RestrictedMessage = jc_ipr_f_DefaultRestrictedMessage();
-	}
-	
 	$jc_ipr_v_RestrictedMessage = preg_replace('/\[MESSAGE\]/i', $tmpMessage, $jc_ipr_v_RestrictedMessage);
 	$jc_ipr_v_RestrictedMessage = preg_replace('/\[NET\]/i', $tmpNet, $jc_ipr_v_RestrictedMessage);
 	$jc_ipr_v_RestrictedMessage = preg_replace('/\[MASK\]/i', $tmpMask, $jc_ipr_v_RestrictedMessage);
@@ -232,6 +227,11 @@ function jc_ipr_f_DisplayManagePage()
 		$jc_ipr_v_RestrictMode			= $_POST['jc_ipr_v_RestrictMode'];
 		$jc_ipr_v_IPRestrictions		= $_POST['jc_ipr_v_IPRestrictions'];
 		$jc_ipr_v_RestrictedMessage	= $_POST['jc_ipr_v_RestrictedMessage'];
+		
+		if ($_POST['jc_ipr_v_RestoreMessage'] == 'restoredefaultmessage')
+		{
+			$jc_ipr_v_RestrictedMessage = jc_ipr_f_DefaultRestrictedMessage();
+		}
 		
 		update_option('jc_ipr_v_RestrictMode',			$jc_ipr_v_RestrictMode);
 		update_option('jc_ipr_v_IPRestrictions',		$jc_ipr_v_IPRestrictions);
@@ -282,7 +282,9 @@ document.write(hours + ":" + minutes + " ")
 </script>
 <h4>Restricted Message</h4>
 <textarea wrap="off" name="jc_ipr_v_RestrictedMessage" style="width: 95%; height: 200px;"><?php echo jc_ipr_f_cleanbothquotes($jc_ipr_v_RestrictedMessage) ?></textarea>
-<p class="submit"><input type="submit" name="submit" value="<?php _e('Update options &raquo;'); ?>" /></p>
+<br />
+<label><input type="checkbox" name="jc_ipr_v_RestoreMessage" value="restoredefaultmessage"> Restore Default Message</label>
+<p class="submit"><input type="button" name="abutton" value="Preview Message" onclick="javascript:popUp('<?php echo get_option('siteurl') . '/wp-content/plugins/' . dirname(plugin_basename(__FILE__)) . '/preview.php'; ?>', 800, 600)" /> <input type="submit" name="submit" value="<?php _e('Update options &raquo;'); ?>" /></p>
 </form>
 </div>
 <div class="wrap">
@@ -308,10 +310,16 @@ Visit <a href="http://www.joshcook.net/">www.joshcook.net</a> for general inform
 <?php
 }
 
-add_action('activate_jc-iprestrictions.php', 'jc_ipr_f_PluginActivate');
+add_action('activate_jc-iprestrictions/jc-iprestrictions.php', 'jc_ipr_f_PluginActivate');
 function jc_ipr_f_PluginActivate()
 {
 	update_option('jc_ipr_v_RestrictMode', 0);
+	
+	if (get_option('jc_ipr_v_RestrictedMessage') == '')
+	{
+		update_option('jc_ipr_v_RestrictedMessage',	jc_ipr_f_DefaultRestrictedMessage());
+	}
+	
 }
 
 add_action('admin_menu', 'jc_ipr_f_AddManagePage');
