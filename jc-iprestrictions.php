@@ -282,8 +282,6 @@ document.write(hours + ":" + minutes + " ")
 </script>
 <h4>Restricted Message</h4>
 <textarea wrap="off" name="jc_ipr_v_RestrictedMessage" style="width: 95%; height: 200px;"><?php echo jc_ipr_f_cleanbothquotes($jc_ipr_v_RestrictedMessage) ?></textarea>
-<br />
-<a href="javascript:popUp('<?php echo get_option('siteurl') . '/wp-content/plugins/' . dirname(plugin_basename(__FILE__)) . '/preview.php'; ?>', 800, 600)">Preview</a>
 <p class="submit"><input type="submit" name="submit" value="<?php _e('Update options &raquo;'); ?>" /></p>
 </form>
 </div>
