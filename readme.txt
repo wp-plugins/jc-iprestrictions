@@ -103,7 +103,7 @@ The restricted message can be either plain text or html, although PHP code is no
 > Form
 > > If a password parameter exists for the restricted entry, a bypass input box is displayed so the viewer can bypass the restriction.  The form input box has a CSS ID of `jc_ipr_css_input` in order to customize.
 
-The preview link is available to verify that the message will display correctly, just to make sure all those path statements are right. ;)  A default message is used if leave the Restricted Message field empty.
+A default message is used if leave the Restricted Message field empty.
 
 Example:
 
